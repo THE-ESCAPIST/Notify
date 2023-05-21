@@ -1,6 +1,7 @@
 import argparse
 import configparser
 import logging
+import os
 from typing import List
 
 import Checkftqq
@@ -53,7 +54,12 @@ class ConfigIni:
     def __init__(self, config_file: str):
         self.config_file = config_file
         self.config = configparser.ConfigParser()
-        self.config.read(self.config_file, encoding = "utf-8")
+        if not os.path.exists(self.config_file):
+            with open(self.config_file, 'w') as f:
+                f.write('[DEFAULT]\n')
+                f.write('LOG_LEVEL = WARNING\n')
+                f.write('DEBUG_LEVEL = False\n')
+        self.config.read(self.config_file, encoding = 'utf-8')
 
     def get_default(self, item: str) -> int:
         """
