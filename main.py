@@ -9,6 +9,13 @@ import dataDisplay
 
 
 def setup_logging(level: int = logging.WARNING):
+    """
+    logging初始化
+
+    :param level: 日志等级
+    :type level: int
+    :return:
+    """
     logging.basicConfig(
         filename = "app.log",
         level = level,
@@ -59,6 +66,14 @@ class ConfigIni:
 
     @staticmethod
     def process_log_level(level_str: str) -> int:
+        """
+        处理日志等级字符串到int
+
+        :param level_str: str型日志等级
+        :type level_str: str
+        :rtype: int
+        :return: 返回int类型日志等级
+        """
         level_dict = {
             'CRITICAL': logging.CRITICAL,
             'FATAL': logging.CRITICAL,
