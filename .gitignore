@@ -1,0 +1,16 @@
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+.idea
+app.log
+data.json
+index.html
+websites.json
+config.ini
+
+# IntelliJ project folder
+build/
+.vscode/
+__pycache__/
+.ignores/

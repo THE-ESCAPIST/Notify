@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Task List</title>
+    <style>
+        .task-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .task-icon {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .task-name {
+            font-size: 20px;
+            margin-right: 10px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-decoration: none;
+        }
+
+        .task-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .task-time {
+            font-size: 16px;
+            color: gray;
+        }
+
+        .article-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .article-title {
+            font-size: 18px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .article-time {
+            font-size: 14px;
+            color: gray;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        .list-container {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        a:link,
+        a:visited {
+            color: inherit;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="list-container">
+        {% for item in data %}
+        <div class="task-container">
+            <img class="task-icon" src="{{ item.task_icon }}" alt="{{ item.task_name }}">
+            <div class="task-info">
+                <a class="task-name" href="{{ item.task_url }}" target="_blank">{{ item.task_name }}</a>
+                <span class="task-time">{{ item.crawling_time }}</span>
+            </div>
+        </div>
+        <div class="article-container">
+            <a class="article-title" href="{{ item.href }}" target="_blank">{{ item.title }}</a>
+            <span class="article-time">{{ item.time }}</span>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+
+</html>
