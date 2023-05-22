@@ -13,4 +13,4 @@ config.ini
 build/
 .vscode/
 __pycache__/
-.ignores/
+.gitignores/

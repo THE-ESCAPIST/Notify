@@ -8,15 +8,6 @@ from bs4 import BeautifulSoup
 from retrying import retry
 
 
-# # 配置日志记录器
-# logging.basicConfig(
-#     filename = "app.log",
-#     level = logging.DEBUG,
-#     format = '%(levelname)s %(asctime)s "%(filename)s" %(funcName)s() : %(message)s',
-#     encoding = "utf-8",
-# )
-
-
 class Website:
     def __init__(self,
                  title_para_tag: str, title_para_attrs: str,
@@ -92,7 +83,7 @@ class WebCrawler:
             self.crawl_Website(website)
 
     @staticmethod
-    @retry(wait_fixed=5000, stop_max_attempt_number=3)
+    @retry(wait_fixed = 5000, stop_max_attempt_number = 3)
     def __get_soup(url):
         """
         该函数用于获取网页的 BeautifulSoup 对象。
@@ -247,7 +238,7 @@ class DataManager:
 
     def save_articles(self, articles):
         """
-        去除articles重复后保存文章
+        去除articles重复后排序并保存文章
 
         :param articles: 包含文章数据的列表。
         :type articles: list
@@ -257,6 +248,7 @@ class DataManager:
         new_data = self.exclude_duplicate(articles)
         len_new_data = len(new_data)
         new_data.extend(existing_data)
+        new_data.sort(key = lambda x: x["time"], reverse = True)
         self.__write_data(new_data)
 
         if len_new_data > 0:
