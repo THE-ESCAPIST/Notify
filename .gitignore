@@ -3,14 +3,11 @@
 
 # IntelliJ project files
 .idea
-app.log
-data.json
 index.html
-websites.json
-config.ini
 
 # IntelliJ project folder
 build/
 .vscode/
 __pycache__/
 .gitignores/
+datas/

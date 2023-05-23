@@ -18,7 +18,7 @@ def setup_logging(level: int = logging.WARNING):
     :return:
     """
     logging.basicConfig(
-        filename = "app.log",
+        filename = "datas/app.log",
         level = level,
         format = '%(levelname)s %(asctime)s "%(filename)s" %(funcName)s() : %(message)s',
         encoding = "utf-8",
@@ -116,9 +116,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # 载入配置文件
-    e_config = ConfigIni("config.ini")
-    e_website_manager = Crawling.WebsiteManager("websites.json")
-    e_data_manager = Crawling.DataManager("data.json")
+    e_config = ConfigIni("datas/config.ini")
+    e_website_manager = Crawling.WebsiteManager("datas/websites.json")
+    e_data_manager = Crawling.DataManager("datas/data.json")
 
     # 配置日志文件
     if args.log:
@@ -151,7 +151,7 @@ if __name__ == "__main__":
     e_data_manager.save_articles(e_article_manager.articles)
 
     # 使用HTMLGenerator类生成html文件
-    generator = dataDisplay.HTMLGenerator("data.json", "template.html", "index.html")
+    generator = dataDisplay.HTMLGenerator("datas/data.json", "resourse/template.html", "index.html")
     generator.convert_html()
 
     # 运行日志
