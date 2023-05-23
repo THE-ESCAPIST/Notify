@@ -151,7 +151,7 @@ if __name__ == "__main__":
     e_data_manager.save_articles(e_article_manager.articles)
 
     # 使用HTMLGenerator类生成html文件
-    generator = dataDisplay.HTMLGenerator("datas/data.json", "resourse/template.html", "index.html")
+    generator = dataDisplay.HTMLGenerator("datas/data.json", "src/template.html", "index.html")
     generator.convert_html()
 
     # 运行日志
