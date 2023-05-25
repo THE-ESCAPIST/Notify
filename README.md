@@ -24,7 +24,7 @@
 
 ### 获取可执行文件
 
-在[Release](https://github.com/esclm/Notify/releases)下载可执行文件
+在[Release](https://github.com/esclm/Notify/releases)下载可执行文件(TODO)
 
 ## 使用
 
@@ -40,6 +40,7 @@
    [DEFAULT]
    LOG_LEVEL = WARNING
    DEBUG_LEVEL = False
+   WEB_FILE = default
 
    [Checkftqq1]
    SCKEY = SCTxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -52,33 +53,33 @@
 
    - LOG_LEVEL为日志等级，可选值为DEBUG, INFO, WARNING, ERROR, CRITICAL
    - DEBUG_LEVEL为调试模式开关，开启时为True，否则为False
+   - WEB_FILE为选择使用的网页组
    - SCKEY、Uid为Server酱的SCKEY和Uid，可多账号同时使用，如不填则不可用
 
 2. 填写需要获取文章的网站列表
 
-   在 `websites.json` 中添加需要获取的网站，包括网站名称、网址、文章列表页地址、文章详情页地址规则等。
+   在 `lib/websites` 中添加需要获取的网站，包括网站名称、网址、文章列表页地址、文章详情页地址规则等。
 
    选项空白模板：
 
    ```json
    [
-      {
-         "port_para_tag": "",
-         "port_para_attrs": {
-            "class": ""
-         },
-         "title_para_tag": "",
-         "title_para_attrs": {},
-         "time_para_tag": "",
-         "time_para_attrs": {
-            "class": ""
-         },
-         "task_name": "",
-         "task_url": "",
-         "task_icon": ""
-      },
-      {
-      }
+     {
+       "title_selector": "",
+       "href_selector": "",
+       "time_selector": "",
+       "task_name": "",
+       "task_url": "",
+       "task_icon": ""
+     },
+     {
+       "title_selector": "",
+       "href_selector": "",
+       "time_selector": "",
+       "task_name": "",
+       "task_url": "",
+       "task_icon": ""
+     }
    ]
    ```
 

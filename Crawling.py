@@ -1,8 +1,9 @@
 import json
 import logging
 from datetime import datetime
-from urllib.parse import urlparse
+from urllib.parse import urljoin
 
+import chardet
 import requests
 from bs4 import BeautifulSoup
 from retrying import retry
@@ -10,16 +11,11 @@ from retrying import retry
 
 class Website:
     def __init__(self,
-                 title_para_tag: str, title_para_attrs: str,
-                 port_para_tag: str, port_para_attrs: str,
-                 time_para_tag: str, time_para_attrs: str,
+                 title_selector: str, href_selector: str, time_selector: str,
                  task_name: str, task_url: str, task_icon: str, ) -> None:
-        self.title_para_tag = title_para_tag
-        self.title_para_attrs = title_para_attrs
-        self.port_para_tag = port_para_tag
-        self.port_para_attrs = port_para_attrs
-        self.time_para_tag = time_para_tag
-        self.time_para_attrs = time_para_attrs
+        self.title_selector = title_selector
+        self.href_selector = href_selector
+        self.time_selector = time_selector
         self.task_name = task_name
         self.task_url = task_url
         self.task_icon = task_icon
@@ -64,13 +60,12 @@ class WebCrawler:
         """
         soup = self.__get_soup(website.task_url)
 
-        for article in soup.find_all(website.port_para_tag, website.port_para_attrs):
-            for link in article.find_all(website.title_para_tag, website.title_para_attrs):
-                origin_data = self.__process_link(link, website)
+        origin_datas = self.__process_website_data(soup, website)
 
-                if origin_data is None:
-                    continue
-                self.origin_data.append(origin_data)
+        if not len(origin_datas):
+            return
+        for origin_data in origin_datas:
+            self.origin_data.append(origin_data)
 
     def crawl_Website_list(self, websites):
         """
@@ -96,8 +91,8 @@ class WebCrawler:
         try:
             response = requests.get(url)
             response.raise_for_status()
-            response.encoding = "utf-8"
-            return BeautifulSoup(response.text, "html.parser")
+            response.encoding = chardet.detect(response.content)["encoding"]
+            return BeautifulSoup(response.text, "html5lib")
         except requests.exceptions.RequestException as e:
             logging.error(f"Request error: {e}")
             raise e
@@ -105,51 +100,89 @@ class WebCrawler:
             logging.error(f"Error: {e}")
             raise e
 
-    def __process_link(self, link, website):
+    def __process_website_data(self, soup, website):
         """
-        从文章中提取数据并返回一个包含文章数据的字典。
+        处理网站数据
 
-        :param link: 文章链接。
-        :type link: bs4.element.Tag
-        :param website: 网站信息。
-        :type website: Website
-        :return: 包含文章数据的字典。
-        :rtype: dict
+        :param soup: BeautifulSoup对象
+        :param website: Website对象
+        :return: 包含所有数据的列表
         """
-        if link is None:
-            return None
+        if soup is None:
+            return []
 
-        title = link.find(self.LINK_FINDER)["title"]
-        href = link.find(self.LINK_FINDER)["href"]
-        href = self.__process_href(href, website.task_url)
-        time = link.find(website.time_para_tag, website.time_para_attrs).text
+        titles = self.__process_titles(soup, website.title_selector)
+        hrefs = self.__process_hrefs(soup, website.href_selector, website.task_url)
+        times = self.__process_times(soup, website.time_selector)
 
-        return {
-            "task_name": website.task_name,
-            "task_url": website.task_url,
-            "task_icon": website.task_icon,
-            "crawling_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "title": title,
-            "time": time,
-            "href": href,
-        }
+        results = []
+        for title, href, time in zip(titles, hrefs, times):
+            result = {
+                "task_name": website.task_name,
+                "task_url": website.task_url,
+                "task_icon": website.task_icon,
+                "crawling_time": self.__format_time(),
+                "title": title,
+                "time": time,
+                "href": href,
+            }
+            results.append(result)
+
+        return results
 
     @staticmethod
-    def __process_href(href, task_url):
+    def __process_titles(soup, selector):
         """
-        将给定的链接处理为完整的URL。
+        处理标题数据
 
-        :param href: 待处理的链接。
-        :type href: str
-        :param task_url: 当前任务的URL。
-        :type task_url: str
-        :return: 完整的URL。
-        :rtype: str
+        :param soup: BeautifulSoup对象
+        :param selector: 标题选择器
+        :return: 标题文本列表
         """
-        if href.startswith("http"):
-            return href
-        else:
-            return "{uri.scheme}://{uri.netloc}".format(uri = urlparse(task_url)) + href
+        return [title.text.strip() for title in soup.select(selector)]
+
+    def __process_hrefs(self, soup, selector, base_url):
+        """
+        处理链接数据
+
+        :param soup: BeautifulSoup对象
+        :param selector: 链接选择器
+        :param base_url: 网站基础链接
+        :return: 链接列表
+        """
+        hrefs = soup.select(selector)
+        return [self.__process_href(href, base_url) for href in hrefs]
+
+    @staticmethod
+    def __process_href(href, base_url):
+        """
+        处理单个链接数据
+
+        :param href: 链接对象
+        :param base_url: 网站基础链接
+        :return: 处理后的链接
+        """
+        return urljoin(base_url, href.get('href'))
+
+    @staticmethod
+    def __process_times(soup, selector):
+        """
+        处理时间数据
+
+        :param soup: BeautifulSoup对象
+        :param selector: 时间选择器
+        :return: 时间文本列表
+        """
+        return [time.text.strip() for time in soup.select(selector)]
+
+    @staticmethod
+    def __format_time():
+        """
+        格式化时间
+
+        :return: 格式化后的时间字符串
+        """
+        return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
 class ArticleManager:
@@ -157,7 +190,7 @@ class ArticleManager:
         # 存储文章数据的列表
         self.articles = []
 
-    def add_article(self, article):
+    def add_article_to_list(self, article):
         """
         将不存在的新文章添加到文章数据列表中
 
@@ -168,7 +201,7 @@ class ArticleManager:
             self.articles.append(article)
             logging.debug(f"Added new article to manager: {article['title']}")
 
-    def add_article_list(self, articles):
+    def add_articles_to_list(self, articles):
         """
         用articles列表调用add_article()函数，将每篇文章加入到网站对象的articles列表中。
 
@@ -177,7 +210,7 @@ class ArticleManager:
         :return: None
         """
         for article in articles:
-            self.add_article(article)
+            self.add_article_to_list(article)
 
     def is_article_exists(self, title, time):
         """
@@ -206,6 +239,16 @@ class ArticleManager:
         """
         self.articles.sort(key = lambda x: x["time"], reverse = is_reverse)
         return self.articles
+
+    def process_data_add_name(self, addition):
+        """
+        为每一项添加前缀
+
+        :param addition: 所需添加的前缀
+        :return: None
+        """
+        for i in range(len(self.articles)):
+            self.articles[i]['task_name'] = addition + '-' + self.articles[i]['task_name']
 
 
 class DataManager:

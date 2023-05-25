@@ -1,0 +1,74 @@
+[
+  {
+    "title_selector": "#wp_news_w6 > ul > li > span.news_title > a > font",
+    "href_selector": "#wp_news_w6 > ul > li > span.news_title > a",
+    "time_selector": "#wp_news_w6 > ul > li > span.news_meta",
+    "task_name": "教务处-办事指南",
+    "task_url": "https://jwc.usst.edu.cn/10240/list.htm",
+    "task_icon": "https://jwc.usst.edu.cn/_upload/tpl/04/27/1063/template1063/favicon.ico"
+  },
+  {
+    "title_selector": "#wp_news_w6 > ul > li > span.news_title > a > font",
+    "href_selector": "#wp_news_w6 > ul > li > span.news_title > a",
+    "time_selector": "#wp_news_w6 > ul > li > span.news_meta",
+    "task_name": "教务处-实践教学",
+    "task_url": "https://jwc.usst.edu.cn/10242/list.htm",
+    "task_icon": "https://jwc.usst.edu.cn/_upload/tpl/04/27/1063/template1063/favicon.ico"
+  },
+  {
+    "title_selector": "#wp_news_w6 > ul > li > span.news_title > a > font",
+    "href_selector": "#wp_news_w6 > ul > li > span.news_title > a",
+    "time_selector": "#wp_news_w6 > ul > li > span.news_meta",
+    "task_name": "教务处-教学研究及质量监控",
+    "task_url": "https://jwc.usst.edu.cn/10241/list.htm",
+    "task_icon": "https://jwc.usst.edu.cn/_upload/tpl/04/27/1063/template1063/favicon.ico"
+  },
+  {
+    "title_selector": "#wp_news_w6 > ul > li > span.news_title > a > font",
+    "href_selector": "#wp_news_w6 > ul > li > span.news_title > a",
+    "time_selector": "#wp_news_w6 > ul > li > span.news_meta",
+    "task_name": "教务处-重要公告",
+    "task_url": "https://jwc.usst.edu.cn/zygg/list.htm",
+    "task_icon": "https://jwc.usst.edu.cn/_upload/tpl/04/27/1063/template1063/favicon.ico"
+  },
+  {
+    "title_selector": "#wp_news_w6 > ul > li > span.news_title > a > font",
+    "href_selector": "#wp_news_w6 > ul > li > span.news_title > a",
+    "time_selector": "#wp_news_w6 > ul > li > span.news_meta",
+    "task_name": "教务处-教学运行管理",
+    "task_url": "https://jwc.usst.edu.cn/10239/list.htm",
+    "task_icon": "https://jwc.usst.edu.cn/_upload/tpl/04/27/1063/template1063/favicon.ico"
+  },
+  {
+    "title_selector": "#wp_news_w6 > ul > li > span.news_title > a > font",
+    "href_selector": "#wp_news_w6 > ul > li > span.news_title > a",
+    "time_selector": "#wp_news_w6 > ul > li > span.news_meta",
+    "task_name": "教务处-综合信息",
+    "task_url": "https://jwc.usst.edu.cn/10238/list.htm",
+    "task_icon": "https://jwc.usst.edu.cn/_upload/tpl/04/27/1063/template1063/favicon.ico"
+  },
+  {
+    "title_selector": "#wp_news_w25 > ul > li > span.cols_title > a",
+    "href_selector": "#wp_news_w25 > ul > li > span.cols_title > a",
+    "time_selector": "#wp_news_w25 > ul > li > span.cols_meta",
+    "task_name": "光电学院-光电公告-本教",
+    "task_url": "https://oece.usst.edu.cn/9007/list.htm",
+    "task_icon": "https://oece.usst.edu.cn/_upload/tpl/03/8b/907/template907/favicon.ico"
+  },
+  {
+    "title_selector": "#wp_news_w6 > ul > li > span.news_title > a",
+    "href_selector": "#wp_news_w6 > ul > li > span.news_title > a",
+    "time_selector": "#wp_news_w6 > ul > li > span.news_meta",
+    "task_name": "本科生院-通知公告",
+    "task_url": "https://bksy.usst.edu.cn/11451/list.htm",
+    "task_icon": "https://bksy.usst.edu.cn/favicon.ico"
+  },
+  {
+    "title_selector": "#wp_news_w9 > div > span.column-news-title > a",
+    "href_selector": "#wp_news_w9 > div > span.column-news-title > a",
+    "time_selector": "#wp_news_w9 > div > span.column-news-date.news-date-hide",
+    "task_name": "创新创业学院-通知公告",
+    "task_url": "https://cxcy.usst.edu.cn/gsgg/list.htm",
+    "task_icon": "https://cxcy.usst.edu.cn/favicon.ico"
+  }
+]

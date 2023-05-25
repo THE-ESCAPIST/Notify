@@ -1,0 +1,18 @@
+[
+  {
+    "title_selector": "body > div.sub-main.wrapper > div > div.ftr.sub-cont > div.list-wrap > ul > li > a > h1",
+    "href_selector": "body > div.sub-main.wrapper > div > div.ftr.sub-cont > div.list-wrap > ul > li > a",
+    "time_selector": "body > div.sub-main.wrapper > div > div.ftr.sub-cont > div.list-wrap > ul > li > a > span",
+    "task_name": "通知公告",
+    "task_url": "https://www.cqmu.edu.cn/index/tzgg.htm",
+    "task_icon": ""
+  },
+  {
+    "title_selector": "#container_content > table > tbody > tr:nth-child(2) > td:nth-child(4) > table:nth-child(2) > tbody > tr:nth-child(3) > td > table > tbody > tr > td:nth-child(2) > table:nth-child(18) > tbody > tr >  td:nth-child(2) > table > tbody > tr > td:nth-child(1) > a > font",
+    "href_selector": "#container_content > table > tbody > tr:nth-child(2) > td:nth-child(4) > table:nth-child(2) > tbody > tr:nth-child(3) > td > table > tbody > tr > td:nth-child(2) > table:nth-child(18) > tbody > tr >  td:nth-child(2) > table > tbody > tr > td:nth-child(1) > a",
+    "time_selector": "#container_content > table > tbody > tr:nth-child(2) > td:nth-child(4) > table:nth-child(2) > tbody > tr:nth-child(3) > td > table > tbody > tr > td:nth-child(2) > table:nth-child(18) > tbody > tr >  td:nth-child(2) > table > tbody > tr > td.postTime",
+    "task_name": "教务通知",
+    "task_url": "https://jwc.cqmu.edu.cn/xwtz/jwtz.htm",
+    "task_icon": ""
+  }
+]

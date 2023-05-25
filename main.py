@@ -55,20 +55,26 @@ class ConfigIni:
         self.config_file = config_file
         self.config = configparser.ConfigParser()
         if not os.path.exists(self.config_file):
-            with open(self.config_file, 'w') as f:
-                f.write('[DEFAULT]\n')
-                f.write('LOG_LEVEL = WARNING\n')
-                f.write('DEBUG_LEVEL = False\n')
+            self.config_init(self.config_file)
         self.config.read(self.config_file, encoding = 'utf-8')
 
-    def get_default(self, item: str) -> int:
+    def get_level_default(self, item: str) -> int:
         """
-        获取日志级别。
+        获取配置。
 
         :return: 日志级别。
         """
         level_str = self.config.get('DEFAULT', item)
         return self.process_log_level(level_str)
+
+    def get_item_default(self, item: str) -> str:
+        """
+        获取配置文件DEFAULT下项目值
+
+        :param item: 需要获取的项
+        :return: 项目值
+        """
+        return self.config.get('DEFAULT', item)
 
     @staticmethod
     def process_log_level(level_str: str) -> int:
@@ -106,10 +112,34 @@ class ConfigIni:
             servers.append(server)
         return servers
 
+    @staticmethod
+    def config_init(config_file):
+        """
+        配置文件初始化
+
+        :param config_file: 配置文件路径
+        :return: None
+        """
+        with open(config_file, 'w') as f:
+            f.write('[DEFAULT]\n')
+            f.write('LOG_LEVEL = WARNING\n')
+            f.write('DEBUG_LEVEL = False\n')
+            f.write('WEB_FILE = default\n')
+
+
+def search_file_relpath(dir_path, filename):
+    """在指定路径下搜索指定文件，忽略文件格式后缀名，返回文件相对路径"""
+    for root, dirs, files in os.walk(dir_path):
+        for file in files:
+            name, ext = os.path.splitext(file)
+            if name == filename or name == filename.split('.')[0]:
+                return os.path.relpath(os.path.join(root, file), dir_path)
+    return None
+
 
 if __name__ == "__main__":
     # 解析命令行参数
-    parser = argparse.ArgumentParser(description = '命令行参数解析')
+    parser = argparse.ArgumentParser(description = '获取网站文章数据')
     parser.add_argument('-l', '--log', action = 'store', help = '日志等级，默认按照config文件设置')
     parser.add_argument('--debug', action = 'store_true', help = '启用调试模式，默认则按照config文件设置')
     parser.add_argument('-c', '--check', action = 'store_true', help = '启用Check酱推送')
@@ -117,14 +147,16 @@ if __name__ == "__main__":
 
     # 载入配置文件
     e_config = ConfigIni("datas/config.ini")
-    e_website_manager = Crawling.WebsiteManager("datas/websites.json")
+    web_file = e_config.get_item_default("WEB_FILE")
+    web_file_path = "lib\\websites\\" + search_file_relpath("lib/websites", web_file)
+    e_website_manager = Crawling.WebsiteManager(web_file_path)
     e_data_manager = Crawling.DataManager("datas/data.json")
 
     # 配置日志文件
     if args.log:
         setup_logging(ConfigIni.process_log_level(args.log))
     else:
-        setup_logging(e_config.get_default("LOG_LEVEL"))
+        setup_logging(e_config.get_level_default("LOG_LEVEL"))
 
     # 对象实例化
     e_crawler = Crawling.WebCrawler()
@@ -132,7 +164,8 @@ if __name__ == "__main__":
 
     # 获取文章
     e_crawler.crawl_Website_list(e_website_manager.Website_list)
-    e_article_manager.add_article_list(e_crawler.origin_data)
+    e_article_manager.add_articles_to_list(e_crawler.origin_data)
+    e_article_manager.process_data_add_name(web_file)  # 添加前缀
 
     # Check酱
     datas = e_data_manager.exclude_duplicate(e_article_manager.process_data_sort(False))
